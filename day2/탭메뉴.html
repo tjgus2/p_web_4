@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>탭메뉴</title>
+    <style>
+        .tab_section {
+            margin: 50px;
+            position: relative;
+        }
+
+        ul {
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .tab {
+            list-style: none;
+            width: 80px;
+            height: 35px;
+            padding: 10px 20px;
+            background-color: rgb(216, 199, 199);
+            font-size: 20px;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 20px 20px 0 0;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background-color: rgb(190, 149, 149);
+        }
+
+        .tab_content {
+            position: absolute;
+            top: 55px;
+            left: 0;
+            padding: 16px;
+            background-color: rgb(190, 149, 149);
+            border-radius: 0 20px 20px 20px;
+            display: none;
+        }
+
+        .tab_content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <section class="tab_section">
+        <ul>
+            <li class="tab active" data-tab="1">tab1</li>
+            <li class="tab" data-tab="2">tab2</li>
+            <li class="tab" data-tab="3">tab3</li>
+        </ul>
+
+        <div id="tab_1" class="tab_content active">
+            <p>
+                첫번째 탭입니다.
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda repellat sed aliquam voluptatum provident quaerat doloribus necessitatibus earum consequuntur, facere odit, explicabo architecto sequi nostrum quidem ut dolorum asperiores magni!
+            </p>
+        </div>
+        <div id="tab_2" class="tab_content">
+            <p>
+                두번째 탭입니다.
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda repellat sed aliquam voluptatum provident quaerat doloribus necessitatibus earum consequuntur, facere odit, explicabo architecto sequi nostrum quidem ut dolorum asperiores magni!
+            </p>
+        </div>
+        <div id="tab_3" class="tab_content">
+            <p>
+                세번째 탭입니다.
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda repellat sed aliquam voluptatum provident quaerat doloribus necessitatibus earum consequuntur, facere odit, explicabo architecto sequi nostrum quidem ut dolorum asperiores magni!
+            </p>
+        </div>
+    </section>
+
+    <script>
+        const tabs = document.querySelectorAll(".tab");
+        const tabContent = document.querySelectorAll(".tab_content");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", () => {
+                tabContent.forEach(tc => tc.classList.remove('active'));
+                // 모든 .tab_content 요소에서 active 클래스를 제거하여 모든 탭 내용이 숨겨짐
+                tabs.forEach(t => t.classList.remove('active'));
+                // 모든 .tab 요소에서 active 클래스를 제거함
+                tab.classList.add('active');
+                // 클릭한 탭에 active 클래스 추가함
+
+                document.getElementById('tab_' +tab.dataset.tab).classList.add('active');
+                // 클랙스 탭의 data-tab 속성 값을 가져와 tab_1, tab_2, tab_3을 만들고 해당 id를 가진 div 요소에 active 클래스를 추가해 해당 탭 내용을 보여줌
+            })
+        })
+    </script>
+</body>
+</html>
