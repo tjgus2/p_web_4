@@ -1,11 +1,199 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>바닐라슬라이드최종</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .slide_container {
+            width: 1000px;
+            height: 500px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .slide {
+            display: flex;
+            height: 500px;
+        }
+
+        .slide > li {
+            width: 1000px;
+            height: 500px;
+            list-style: none;
+        }
+
+        img {
+            width: 1000px;
+            height: 500px;
+        }
+
+        .slide_btns {
+            width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            margin: 30px auto;
+        }
+
+        .slide_btns > button {
+            width: 100px;
+            height: 50px;
+            font-size: 30px;
+            background-color: cornflowerblue;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dot_box {
+            display: flex;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: rgb(209, 219, 239);
+            border-radius: 50%;
+            margin: 8px;
+        }
+
+        .active {
+            background-color: rgb(96, 147, 249);
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="slide_container">
+        <ul class="slide">
+            <li class="slider_01">
+                <img src="./1.jpeg" alt="">
+            </li>
+            <li class="slider_02">
+                <img src="./2.jpg" alt="">
+            </li>
+            <li class="slider_03">
+                <img src="./3.jpeg" alt="">
+            </li>
+            <li class="slider_04">
+                <img src="./4.jpeg" alt="">
+            </li>
+            <li class="slider_05">
+                <img src="./5.jpg" alt="">
+            </li>
+        </ul>
+    </div>
+
+    <div class="slide_btns">
+        <button>prev</button>
+        <div class="dot_box"></div>
+        <button>next</button>
+    </div>
+
+    <script>
+        const buttons = document.querySelector(".slide_btns");
+        const viewBox = document.querySelector(".slide_container");
+        const slide = document.querySelector(".slide");
+        const dotBox = document.querySelector(".dot_box");
+        const sliderWidth = 1000;
+        let moveCheck = true;
+        
+        //------------------------------------------------------------------
+
+        const first = slide.firstElementChild.cloneNode(true);
+        const last = slide.lastElementChild.cloneNode(true);
+
+        slide.appendChild(first);
+        // 맨 마지막에 추가
+        slide.insertBefore(last, slide.firstElementChild);
+        // 맨 앞에 추가
+
+        let sliderLength = slide.childElementCount;
+        // 7개 5 1 2 3 4 5 1
+        slide.style.width = sliderLength * sliderWidth + 'px'; 
+        // ul 길이조절
+
+        //------------------------------------------------------------------
+
+        // 처음 브라우저 열었을 때 보이는 인덱스 설정정
+        let index = 1;
+        slide.style.transform = `translateX(-${index * sliderWidth}px)`;
+
+        //------------------------------------------------------------------
+
+        buttons.children[0].addEventListener("click", prev);
+        buttons.children[2].addEventListener("click", next);
+
+        //------------------------------------------------------------------
+
+        function moveSlide(time) {
+            slide.style.transition = time + 'ms';
+            slide.style.transform = `translateX(-${index*sliderWidth}px)`;
+            updateDot();
+        }
+        //------------------------------------------------------------------
+
+        function prev() {
+            if (moveCheck) {
+                moveCheck = false;
+                index--;
+                setTimeout(() => {
+                    if (index == 0){
+                        index = sliderLength-2;
+                        moveSlide(0);
+                    }
+                    moveCheck = true;
+                }, 1000);
+                moveSlide(1000);
+            }
+        }
+
+        function next() {
+            if (moveCheck) {
+                moveCheck = false;
+                index++;
+                setTimeout(() => {
+                    if (index == sliderLength-1) {
+                        index = 1;
+                        moveSlide(0);
+                    }
+                    moveCheck = true
+                }, 1000);
+                moveSlide(1000);
+            }
+        }
+       
+        //------------------------------------------------------------------
+
+        for (let i=0; i<sliderLength-2; i++) {
+            const makeDiv = document.createElement('div');
+            makeDiv.classList.add('dot');
+            dotBox.appendChild(makeDiv);
+
+            makeDiv.addEventListener("click", () => {
+                index = i+1;
+                moveSlide(1000);
+            });
+        }
+
+        dotBox.children[0].classList.add('active');
+
+        function updateDot() {
+            for (let i=0; i<sliderLength-2; i++) {
+                dotBox.children[i].classList.remove('active');
+                if (index == 0) {
+                    dotBox.children[sliderLength-3].classList.add('active');
+                } else if (index == sliderLength-1) {
+                    dotBox.children[0].classList.add('active');
+                } else {
+                    dotBox.children[index-1].classList.add('active');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
