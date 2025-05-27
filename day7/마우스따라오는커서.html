@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마우스 따라오는 커서</title>
+    <style>
+        .cursor {
+            width: 15px;
+            height: 15px;
+            background-color: aquamarine;
+            border-radius: 50%;
+            transition: 0.1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <script>
+        const cursor = document.querySelector(".cursor");
+
+        // 커서를 따라 움직이도록 설정
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.transform = `translate(${e.pageX}px, ${e.pageY}px)`;
+            // pageX,pageY : MouseEvent 객체의 속성으로, 마우스 이벤트가 발생한 위치의 문서(document) 기준 좌표를 나타냄
+        })
+
+        // 클릭 시 커서 크기 증가
+        document.addEventListener("mousedown", () => {
+            cursor.style.transform += "scale(1.5)";
+        })
+
+        // 클릭 해제 시 크기 복구
+        document.addEventListener("mouseup", () => {
+            cursor.style.transform = cursor.style.transform.replace("scale(1.5)", "");
+            // replace("제거할 값", "새로 넣을 값"): 문자열에서 특정 부분을 찾아 다른 문자열로 대체하는 메소드
+            // transfomr 값에서 "scale(1.5)"를 찾아 빈 문자열("")로 대체
+        })
+    </script>
+</body>
+</html>
