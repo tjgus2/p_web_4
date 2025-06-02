@@ -105,7 +105,74 @@
     </ul>
     <script>
         let currentSectionIndex = 0;
-        const sections
+        const sections = document.querySelectorAll(".section");
+        const menuItems = document.querySelectorAll(".menu_item");
+        const totalSections = sections.length;
+        let isScrolling = false;
+        let isFullPageScrollActive = false;
+        const breakPoint = 1024;
+
+        function updateMenu() {
+            menuItems.forEach((item, index) => {
+                if (index == currentSectionIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            })
+        }
+        updateMenu();
+
+        menuItems.forEach((item) => {
+            item.addEventListener("click", (e) => {
+                const index = parseInt(e.target.dataset.index, 10);
+                currentSectionIndex = index;
+                sections[currentSectionIndex].scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+                updateMenu();
+            })
+        })
+
+        function handleScroll(event) {
+            if (window.innerWidth <= breakPoint) return;
+
+            if (isScrolling) return;
+            isScrolling = true;
+            if (event.deltaY > 0) {
+                currentSectionIndex = Math.min(currentSectionIndex+1, totalSections-1);
+            } else {
+                currentSectionIndex = Math.max(currentSectionIndex-1, 0);
+            }
+            sections[currentSectionIndex].scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+            updateMenu();
+            setTimeout(() => (isScrolling = false), 800);
+        }
+
+        function initFullpageScroll() {
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < window.innerHeight) {
+                    currentSectionIndex = index;
+                }
+            });
+            isScrolling = false;
+            if (window.innerWidth > breakPoint && !isFullPageScrollActive) {
+                isFullPageScrollActive = true;
+                document.body.style.overflow = "hidden";
+                window.addEventListener("wheel", handleScroll);
+            } else if (window.innerWidth <= breakPoint && isFullPageScrollActive) {
+                isFullPageScrollActive = false;
+                document.body.style.overflow = "auto";
+                window.removeEventListener("wheel", handleScroll);
+            }
+        }
+
+        window.addEventListener("resize", initFullpageScroll);
     </script>
 </body>
 
