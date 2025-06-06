@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3d카드</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            gap: 40px;
+            perspective: 800px;
+            background-color: aliceblue;
+        }
+
+        .card {
+            position: relative;
+            width: 300px;
+            height: 450px;
+            background: url(./bg_img.jpg);
+            border-radius: 20px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.
+            3);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .card_content {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #fff;
+            transform: translateZ(100px);
+        }
+
+        .card_content > h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .card_content > p {
+            margin: 20px 0;
+        }
+
+        .overlay_img {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            transform: translateZ(60px);
+        }
+    </style>
+</head>
+<body>
+    <div class="card first">
+        <div class="card_content">
+            <h2>다람쥐의 일상</h2>
+            <p>저는 다람쓰 장풍을 날릴 수 있습니다.</p>
+        </div>
+        <img class="overlay_img" src="./images.png" alt="다람쥐이미지">
+    </div>
+    <div class="card second">
+        <div class="card_content">
+            <h2>고양이의 일상</h2>
+            <p>간식 주세요.</p>
+        </div>
+        <img class="overlay_img" src="./images2.png" alt="고양이이미지">
+    </div>
+    <script>
+        const cards = document.querySelectorAll(".card");
+
+        cards.forEach(card => {
+            card.addEventListener("mousemove", (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width/2;
+                const centerY = rect.height/2;
+
+                const rotateX = -(y-centerY) / 15;
+                const rotateY = (x-centerX)  / 15;
+
+                card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener("mouseleave", () => {
+                card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+            })
+        })
+    </script>
+</body>
+</html>
